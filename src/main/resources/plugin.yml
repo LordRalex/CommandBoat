@@ -1,0 +1,10 @@
+name: ${project.name}
+main: com.lordralex.commandboat.bukkit.CommandBoat
+version: ${project.version}
+author: Lord_Ralex
+prefix: ${project.name}
+commands:
+  spawn:
+    permission: commandbook.spawn
+  setspawn:
+    permission: commandbook.setspawn

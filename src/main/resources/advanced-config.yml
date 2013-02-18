@@ -1,0 +1,6 @@
+spawn:
+  permission: commandbook.spawn
+  help: Teleports you to spawn
+setspawn:
+  permission: commandbook.setspawn
+  help: Sets the spawn
