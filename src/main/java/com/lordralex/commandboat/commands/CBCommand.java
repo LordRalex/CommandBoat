@@ -2,6 +2,7 @@ package com.lordralex.commandboat.commands;
 
 import com.lordralex.commandboat.bukkit.CommandBoat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -14,16 +15,25 @@ import org.bukkit.plugin.InvalidPluginException;
  */
 public abstract class CBCommand implements CommandExecutor {
 
-    protected String name, permission, help;
+    protected String name, permission, help, nopermission;
     protected boolean enabled = false;
 
-    public CBCommand(String aN, String aP, String aH) {
+    public CBCommand(String aN, String aP, String aH, String aNoPerm) {
         if (name == null) {
             throw new NullPointerException("Command name cannot be null");
         }
         name = aN;
         permission = (aP == null ? "commandboat." + name : aP);
-        help = (aH == null ? "No help set up for /" + name : aH);
+        help = (aH == null || aH.isEmpty() ? "No help set up for /" + name : aH);
+        nopermission = (aNoPerm == null || aNoPerm.isEmpty() ? ChatColor.RED + "You do not have permission to use this command" : aNoPerm);
+    }
+
+    public CBCommand(String aN, String aP, String aH) {
+        this(aN, aP, aH, null);
+    }
+
+    public CBCommand(String aN) {
+        this(aN, null, null, null);
     }
 
     public String getName() {
@@ -47,6 +57,7 @@ public abstract class CBCommand implements CommandExecutor {
     }
 
     public final boolean enable() throws InvalidPluginException {
+        enabled = false;
         PluginCommand cmd = CommandBoat.getInstance().getCommand(name);
         if (cmd == null) {
             throw new NullPointerException("No command with the name " + name + " was found within Bukkit");
@@ -56,6 +67,7 @@ public abstract class CBCommand implements CommandExecutor {
         }
         cmd.setPermission(permission);
         cmd.setUsage(help);
+        cmd.setPermissionMessage(nopermission);
         cmd.setExecutor(this);
         enabled = true;
         return enabled;

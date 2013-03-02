@@ -14,11 +14,15 @@ import org.bukkit.entity.Player;
 public class SpawnCommand extends CBCommand {
 
     public SpawnCommand() {
-        this(null, null);
+        this(null, null, null);
     }
 
-    public SpawnCommand(String aPerm, String aHelp) {
-        super("spawn", aPerm, aHelp);
+    public SpawnCommand(String aP, String aH) {
+        this(aP, aH, null);
+    }
+
+    public SpawnCommand(String aPerm, String aHelp, String aNoPerm) {
+        super("spawn", aPerm, aHelp, aNoPerm);
     }
 
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
