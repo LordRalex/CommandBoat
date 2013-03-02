@@ -49,10 +49,10 @@ public abstract class CBCommand implements CommandExecutor {
     public final boolean enable() throws InvalidPluginException {
         PluginCommand cmd = CommandBoat.getInstance().getCommand(name);
         if (cmd == null) {
-            throw new NullPointerException("No command with that name");
+            throw new NullPointerException("No command with the name " + name + " was found within Bukkit");
         }
         if (!cmd.getPlugin().getName().equalsIgnoreCase(CommandBoat.getInstance().getName())) {
-            throw new InvalidPluginException("The command " + name + " is not tied to the CommandBoat plugin");
+            throw new InvalidPluginException("The command " + name + " is not tied to the CommandBoat plugin, but instead to " + cmd.getPlugin().getName());
         }
         cmd.setPermission(permission);
         cmd.setUsage(help);

@@ -1,13 +1,17 @@
 package com.lordralex.commandboat.bukkit;
 
 import com.lordralex.commandboat.commands.*;
-import com.lordralex.commmandboat.config.Config;
+import com.lordralex.commandboat.commands.enums.CommandList;
+import com.lordralex.commmandboat.config.CommandConfig;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.InvalidPluginException;
@@ -20,14 +24,22 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class CommandBoat extends JavaPlugin {
 
-    private static CommandBoat instance;
-    private Config config;
+    private static CommandBoat instance = null;
+    private CommandConfig config = null;
 
     @Override
     public void onLoad() {
-        saveDefaultConfig();
-        config = new Config();
-        config.load();
+        try {
+            saveDefaultConfig();
+            config = new CommandConfig();
+            config.load();
+        } catch (IOException ex) {
+            getLogger().log(Level.SEVERE, "An error has occured", ex);
+            Bukkit.getPluginManager().disablePlugin(this);
+        } catch (InvalidConfigurationException ex) {
+            getLogger().log(Level.SEVERE, "An error has occured", ex);
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override
@@ -36,30 +48,32 @@ public class CommandBoat extends JavaPlugin {
         //load commands
         List<CBCommand> commands = new ArrayList<CBCommand>();
         List<String> cmds = getConfig().getStringList("enabled-commands");
-        for (String cmd : cmds) {
-            CommandList cL = CommandList.getCommand(cmd);
-            if (cL == null) {
-                return;
-            }
-            try {
-                String help = config.get(cL.name + ".help");
-                String perm = config.get(cL.name + ".permission");
-                CBCommand command = (CBCommand) cL.getCommandClass().getConstructor(String.class, String.class).newInstance(perm, help);
-                commands.add(command);
-            } catch (NoSuchMethodException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
-            } catch (ClassCastException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
-                getLogger().log(Level.SEVERE, null, ex);
+        if (cmds != null) {
+            for (String cmd : cmds) {
+                CommandList cL = CommandList.getCommand(cmd);
+                if (cL == null) {
+                    continue;
+                }
+                try {
+                    String help = config.getString(cL.getName() + ".help");
+                    String perm = config.getString(cL.getName() + ".permission");
+                    CBCommand command = (CBCommand) cL.getCommandClass().getConstructor(String.class, String.class).newInstance(perm, help);
+                    commands.add(command);
+                } catch (NoSuchMethodException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                } catch (SecurityException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                } catch (InstantiationException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                } catch (IllegalAccessException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                } catch (ClassCastException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                } catch (IllegalArgumentException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                } catch (InvocationTargetException ex) {
+                    getLogger().log(Level.SEVERE, "Issue loading command " + cL.getName(), ex);
+                }
             }
         }
 
@@ -76,6 +90,7 @@ public class CommandBoat extends JavaPlugin {
             }
         }
         Permission starperm = new Permission("commandbook.commands.*", PermissionDefault.OP, children);
+        starperm.recalculatePermissibles();
 
         //hook into vault
     }
@@ -86,31 +101,5 @@ public class CommandBoat extends JavaPlugin {
 
     public static CommandBoat getInstance() {
         return instance;
-    }
-
-    private enum CommandList {
-
-        Spawn("spawn", SpawnCommand.class),
-        SetSpawn("setspawn", SetSpawnCommand.class);
-        private final Class cl;
-        private final String name;
-
-        private CommandList(String aN, Class c) {
-            name = aN;
-            cl = c;
-        }
-
-        public Class getCommandClass() {
-            return cl;
-        }
-
-        public static CommandList getCommand(String aN) {
-            for (CommandList c : CommandList.values()) {
-                if (c.name.equalsIgnoreCase(aN)) {
-                    return c;
-                }
-            }
-            return null;
-        }
     }
 }
