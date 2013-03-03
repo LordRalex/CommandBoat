@@ -1,4 +1,4 @@
-package com.lordralex.commmandboat.config;
+package com.lordralex.commandboat.config;
 
 import com.lordralex.commandboat.bukkit.CommandBoat;
 import java.io.BufferedReader;

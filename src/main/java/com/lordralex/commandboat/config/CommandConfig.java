@@ -1,4 +1,4 @@
-package com.lordralex.commmandboat.config;
+package com.lordralex.commandboat.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

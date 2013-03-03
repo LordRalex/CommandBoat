@@ -1,6 +1,6 @@
 package com.lordralex.commandboat.commands.enums;
 
-import com.lordralex.commandboat.commands.*;
+import com.lordralex.commandboat.commands.teleportation.*;
 
 /**
  * @version 0.1

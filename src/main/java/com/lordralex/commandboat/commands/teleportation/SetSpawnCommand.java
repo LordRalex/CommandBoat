@@ -1,5 +1,6 @@
-package com.lordralex.commandboat.commands;
+package com.lordralex.commandboat.commands.teleportation;
 
+import com.lordralex.commandboat.commands.CBCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

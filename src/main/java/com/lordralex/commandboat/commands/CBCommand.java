@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.InvalidPluginException;
 
 /**
@@ -13,7 +14,7 @@ import org.bukkit.plugin.InvalidPluginException;
  * @author Lord_Ralex
  * @since 0.1
  */
-public abstract class CBCommand implements CommandExecutor {
+public abstract class CBCommand implements CommandExecutor, Listener {
 
     protected String name, permission, help, nopermission;
     protected boolean enabled = false;
@@ -69,7 +70,14 @@ public abstract class CBCommand implements CommandExecutor {
         cmd.setUsage(help);
         cmd.setPermissionMessage(nopermission);
         cmd.setExecutor(this);
+        if (hasListener()) {
+            Bukkit.getPluginManager().registerEvents(this, CommandBoat.getInstance());
+        }
         enabled = true;
         return enabled;
+    }
+
+    public boolean hasListener() {
+        return false;
     }
 }
