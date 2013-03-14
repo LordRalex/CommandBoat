@@ -2,7 +2,7 @@ package com.lordralex.commandboat.bukkit;
 
 import com.lordralex.commandboat.commands.*;
 import com.lordralex.commandboat.commands.enums.CommandList;
-import com.lordralex.commmandboat.config.CommandConfig;
+import com.lordralex.commandboat.config.CommandConfig;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

@@ -19,7 +19,7 @@ public abstract class CBCommand implements CommandExecutor, Listener {
     protected String name, permission, help, nopermission;
     protected boolean enabled = false;
 
-    public CBCommand(String aN, String aP, String aH, String aNoPerm) {
+    protected CBCommand(String aN, String aP, String aH, String aNoPerm) {
         if (name == null) {
             throw new NullPointerException("Command name cannot be null");
         }
@@ -29,11 +29,11 @@ public abstract class CBCommand implements CommandExecutor, Listener {
         nopermission = (aNoPerm == null || aNoPerm.isEmpty() ? ChatColor.RED + "You do not have permission to use this command" : aNoPerm);
     }
 
-    public CBCommand(String aN, String aP, String aH) {
+    protected CBCommand(String aN, String aP, String aH) {
         this(aN, aP, aH, null);
     }
 
-    public CBCommand(String aN) {
+    protected CBCommand(String aN) {
         this(aN, null, null, null);
     }
 
@@ -53,7 +53,7 @@ public abstract class CBCommand implements CommandExecutor, Listener {
         return enabled;
     }
 
-    public Command getCommand() {
+    public final Command getCommand() {
         return Bukkit.getPluginCommand(name);
     }
 

@@ -105,7 +105,8 @@ public class VanishCommand extends CBCommand {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        updatePlayerVisibility(event.getPlayer(), vanishState.get(event.getPlayer().getName()));
+        //will not work for existing hidden players, need to iterate though do it for everyone
+        //updatePlayerVisibility(event.getPlayer(), vanishState.get(event.getPlayer().getName()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
